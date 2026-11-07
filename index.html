@@ -188,8 +188,8 @@ a{color:var(--accent)}
         <input class="field" id="modelInput" style="width:100%" autocomplete="off" autocapitalize="off" spellcheck="false">
         <p style="margin-top:6px">Leave as is unless Google retires this model. Older fallbacks are tried automatically.</p>
         <label for="styleInput" style="margin-top:16px">Voice style (Gemini)</label>
-        <textarea class="field area" id="styleInput" maxlength="200" placeholder="e.g. dramatic and theatrical, like Moira Rose" autocapitalize="sentences"></textarea>
-        <p style="margin-top:6px">Describe how translations should be spoken. When this is filled in, every playback uses a Gemini voice, even if this phone has its own, which uses more of your Gemini quota. Only the delivery changes, never the words. Leave empty for normal voices.</p>
+        <textarea class="field area" id="styleInput" maxlength="200" placeholder="e.g. dramatic and theatrical, mid-Atlantic accent, grand vocabulary" autocapitalize="sentences"></textarea>
+        <p style="margin-top:6px">Describe how translations should sound: mood, pace, accent, character. Describing works better than a name: Gemini can't copy a specific person's or character's voice and may ignore names. When this is filled in, every playback uses a Gemini voice, even if this phone has its own, which uses more of your Gemini quota. Only the delivery changes, never the words. Leave empty for normal voices.</p>
         <button class="btn" id="keyRemove" style="margin-top:12px">Remove saved key</button>
       </details>
     </div>
@@ -824,15 +824,29 @@ function pcmToWav(bytes, rate) {
 }
 async function geminiVoice(text, lang, voiceName, style) {
   const voice = voiceName || await pickGeminiVoice(lang);
-  // A style changes only the delivery; the words to speak follow "Say:".
-  const spoken = style ? 'In this speaking style: ' + style + '\nSay: ' + text : text;
+  // A style must never be spoken: send it as a separate instruction and keep the input to the
+  // translation alone. If the API rejects that field, fall back to a director's-notes prompt.
+  let styleMode = style ? 'system' : 'none';
+  const makeBody = (model, v) => {
+    const spoken = styleMode === 'notes'
+      ? '### DIRECTOR\'S NOTES (do not read aloud)\nDelivery style: ' + style + '\n\n### TRANSCRIPT (read only this, word for word)\n' + text
+      : text;
+    const body = { model, input: [{ type: 'user_input', content: [{ type: 'text', text: spoken }] }], response_format: { type: 'audio' }, generation_config: { speech_config: [{ voice: v }] } };
+    if (styleMode === 'system') body.system_instruction = 'You are a voice actor. Speak the user\'s text word for word, in this delivery style: ' + style + '. Never say these instructions or any words that are not in the user\'s text.';
+    return body;
+  };
   const order = lang.full ? [TTS_FULL, TTS_LITE] : [TTS_LITE, TTS_FULL];
   let last;
   for (const model of order) {
     for (const v of [...new Set([voice, 'Kore'])]) {
-      const body = { model, input: [{ type: 'user_input', content: [{ type: 'text', text: spoken }] }], response_format: { type: 'audio' }, generation_config: { speech_config: [{ voice: v }] } };
       try {
-        const d = await gfetch('interactions', { method: 'POST', body: JSON.stringify(body) }, 60000);
+        let d;
+        try { d = await gfetch('interactions', { method: 'POST', body: JSON.stringify(makeBody(model, v)) }, 60000); }
+        catch (e) {
+          if (styleMode !== 'system' || e.status !== 400 || !/system_instruction|unknown name|invalid json/i.test(e.raw)) throw e;
+          styleMode = 'notes';
+          d = await gfetch('interactions', { method: 'POST', body: JSON.stringify(makeBody(model, v)) }, 60000);
+        }
         const a = findAudioPart(d); if (!a) throw mkErr(0, 'No audio came back.', JSON.stringify(d).slice(0, 300));
         const mime = a.mime_type || a.mimeType || 'audio/wav';
         const bytes = b64ToBytes(a.data);

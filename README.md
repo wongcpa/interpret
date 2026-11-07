@@ -42,6 +42,8 @@ Menu names vary by phone and OS version.
 
 ## Notes
 
+- **Interface languages:** English, 简体中文, 繁體中文, 日本語, Español, Italiano and Français. The app opens in the phone's language; change it under Settings → App language.
+- **Typing:** type text in the box under the mic and tap Translate; it uses the same voices and Play button. Needs a key (demo mode only plays its samples).
 - **Voice picker** (under "To"): Automatic, any phone voice for that language (free), or one of Gemini's 30 named voices (uses the key). Remembered per language. The ▶ button previews; each Gemini preview is generated once and reused.
 - **Voice style** (Settings → Advanced): a free-text delivery style such as "dramatic and theatrical, like Moira Rose". When set, every playback uses a Gemini voice, which uses more quota. It changes only the delivery, never the words.
 - Models: `gemini-3.5-flash-lite` for translation (falls back to older Flash-Lite models if retired; changeable under Settings → Advanced). `gemini-3.8-flash-lite-tts` / `gemini-3.8-flash-tts` for the fallback voice.

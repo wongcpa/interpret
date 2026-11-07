@@ -8,7 +8,7 @@ The API key is **not** in this code. Each phone stores its own copy after you pa
 
 1. In this repo: **Settings → Pages**.
 2. Source: **Deploy from a branch** → Branch: **main** → folder **/ (root)** → Save.
-3. After a minute the site is live at `https://wongcpa.github.io/<repo-name>/`.
+3. After a minute the site is live at `https://www.wong.cpa/interpret/`. (The `wongcpa.github.io` site uses the custom domain `www.wong.cpa`, so project sites are served there too; `https://wongcpa.github.io/interpret/` redirects to it.)
 
 ## 2. Set up the Gemini key (once)
 
@@ -16,7 +16,7 @@ The API key is **not** in this code. Each phone stores its own copy after you pa
 2. Set up billing on that project in AI Studio (paid tier: higher limits, prompts not used for training).
 3. In Google Cloud Console → **APIs & Services → Credentials** → open the key:
    - **API restrictions:** restrict to *Generative Language API*.
-   - **Application restrictions:** *Websites* → add `https://wongcpa.github.io/*`.
+   - **Application restrictions:** *Websites* → add `https://www.wong.cpa/*` (where the app is served) and `https://wongcpa.github.io/*`.
 4. In **Billing → Budgets & alerts**, add a small monthly budget alert (for example, $5).
 
 ## 3. Set up each phone (once)

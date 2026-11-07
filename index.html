@@ -883,28 +883,29 @@ async function geminiVoice(text, lang, voiceName, style) {
     if (styleMode === 'system') body.system_instruction = 'You are a voice actor. Speak the user\'s text word for word, in this delivery style: ' + style + '. Never say these instructions or any words that are not in the user\'s text.';
     return body;
   };
+  // Spend as few requests as possible (free-tier limits): one voice, one model. Only a missing
+  // model (404) moves on to the other TTS model; any other failure is reported straight away,
+  // and the caller falls back to the phone's own voice.
   const order = lang.full ? [TTS_FULL, TTS_LITE] : [TTS_LITE, TTS_FULL];
   let last;
   for (const model of order) {
-    for (const v of [...new Set([voice, 'Kore'])]) {
-      try {
-        let d;
-        try { d = await gfetch('interactions', { method: 'POST', body: JSON.stringify(makeBody(model, v)) }, 60000); }
-        catch (e) {
-          // Any rejection of the request shape (not key, quota or network trouble) -> retry without the instruction field
-          if (styleMode !== 'system' || !(e.status >= 400 && e.status < 500) || [401, 403, 429].includes(e.status)) throw e;
-          styleMode = 'notes';
-          d = await gfetch('interactions', { method: 'POST', body: JSON.stringify(makeBody(model, v)) }, 60000);
-        }
-        const a = findAudioPart(d); if (!a) throw mkErr(0, tx('noAudioBack'), JSON.stringify(d).slice(0, 300));
-        const mime = a.mime_type || a.mimeType || 'audio/wav';
-        const bytes = b64ToBytes(a.data);
-        const blob = /l16|pcm/i.test(mime) ? pcmToWav(bytes, 24000) : new Blob([bytes], { type: mime });
-        return URL.createObjectURL(blob);
-      } catch (e) {
-        last = e;
-        if (e.status === 401 || e.status === 403 || e.status === 429 || e.kind === 'network') throw e;
+    try {
+      let d;
+      try { d = await gfetch('interactions', { method: 'POST', body: JSON.stringify(makeBody(model, voice)) }, 60000); }
+      catch (e) {
+        // The API rejected the request shape (not key, quota, missing model or network) -> retry without the instruction field
+        if (styleMode !== 'system' || !(e.status >= 400 && e.status < 500) || [401, 403, 404, 429].includes(e.status)) throw e;
+        styleMode = 'notes';
+        d = await gfetch('interactions', { method: 'POST', body: JSON.stringify(makeBody(model, voice)) }, 60000);
       }
+      const a = findAudioPart(d); if (!a) throw mkErr(0, tx('noAudioBack'), JSON.stringify(d).slice(0, 300));
+      const mime = a.mime_type || a.mimeType || 'audio/wav';
+      const bytes = b64ToBytes(a.data);
+      const blob = /l16|pcm/i.test(mime) ? pcmToWav(bytes, 24000) : new Blob([bytes], { type: mime });
+      return URL.createObjectURL(blob);
+    } catch (e) {
+      last = e;
+      if (e.status !== 404) throw e;
     }
   }
   throw last || mkErr(0, tx('noVoiceNow'));

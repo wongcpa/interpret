@@ -15,11 +15,12 @@ The API key is **not** in this code. Each phone stores its own copy after you pa
 ## 2. Set up the Gemini key (once)
 
 1. Create a key at <https://aistudio.google.com/apikey>.
-2. Set up billing on that project in AI Studio (paid tier: higher limits, prompts not used for training).
-3. In Google Cloud Console → **APIs & Services → Credentials** → open the key:
-   - **API restrictions:** restrict to *Generative Language API*.
-   - **Application restrictions:** *Websites* → add `https://www.wong.cpa/*` (where the app is served) and `https://wongcpa.github.io/*`.
-4. In **Billing → Budgets & alerts**, add a small monthly budget alert (for example, $5).
+2. Decide free or paid:
+   - **Free key:** no bill, but usage limits apply, and as with other free Google services, Google may use what you send (recordings and translations) to improve its products, and people may review it. Not for private or sensitive conversations.
+   - **Paid key:** turn on billing for the project in AI Studio. Google doesn't use your data this way, and limits are higher. Normal personal use usually costs very little.
+3. In Google Cloud Console → **APIs & Services → Credentials** → open the key → **API restrictions:** restrict it to the *Gemini API*. Google requires Gemini keys to be bound to a service account, so website restrictions aren't available; the key stays private because it's only stored on the phones where you paste it.
+4. On a paid key, cap usage: **APIs & Services → Gemini API → Quotas** → set a low daily request limit (a few hundred is plenty for a family). Also add a budget alert under **Billing → Budgets & alerts**; alerts only notify you, while the quota actually stops usage.
+5. If a key ever leaks, delete it in Credentials and paste a new one on each phone.
 
 ## 3. Set up each phone (once)
 

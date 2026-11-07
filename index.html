@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Translate</title>
-<meta name="theme-color" content="#1f6feb">
+<meta name="theme-color" content="#0F2A3D">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Translate">
@@ -12,11 +12,21 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f6f9;--card:#fff;--text:#15181d;--muted:#5d6470;--line:#dfe3e9;--accent:#1f6feb;--accent-bg:#e8f0fe;--rec:#d93025;--rec-bg:#fde8e7;--ok:#137333;--ok-bg:#e6f4ea;--warn:#7a4f00;--warn-bg:#fef4d6}
-@media (prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#181b21;--text:#eceef2;--muted:#9aa1ad;--line:#2b3038;--accent:#79adff;--accent-bg:#1b2a44;--rec:#ff7366;--rec-bg:#3a1d1b;--ok:#62d68a;--ok-bg:#15301f;--warn:#f3c969;--warn-bg:#3a2f12}}
+/* wong.cpa brand: slate, gold and paper; dark mode is a slate variant */
+:root{--bg:#F6F6F4;--card:#fff;--text:#0d0d0d;--muted:#6b7280;--line:#d1cdc4;--accent:#0F2A3D;--accent-bg:#f5f0e8;--on-accent:#fff;--gold:#7A5F2C;--gold-hi:#C9A45C;--rec:#b91c1c;--rec-bg:#fef2f2;--warn:#7A5F2C;--warn-bg:#f5f0e8;--mono:"IBM Plex Mono",ui-monospace,monospace;--head:"Sora",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0a1823;--card:#0F2A3D;--text:#eef1f4;--muted:#9fb0bf;--line:#24425a;--accent:#C9A45C;--accent-bg:#17364d;--on-accent:#0F2A3D;--gold:#C9A45C;--gold-hi:#C9A45C;--rec:#ff7b70;--rec-bg:#3a1d1b;--warn:#e6c47e;--warn-bg:#17364d}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans","PingFang HK","Noto Sans CJK TC",sans-serif}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans","PingFang HK","Noto Sans CJK TC",sans-serif}
+h1,h2,h3{font-family:var(--head)}
+.wb-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0F2A3D;margin:calc(-10px - env(safe-area-inset-top)) -16px 14px;padding:calc(env(safe-area-inset-top) + 9px) 16px 9px}
+.wb-brand{display:inline-flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-family:var(--head);font-weight:600;font-size:15px}
+.wb-brand svg{width:24px;height:24px;border-radius:4px}
+.wb-back{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#C9A45C;text-decoration:none}
+@media (display-mode:standalone){.wb-bar{display:none}}
+.standalone .wb-bar{display:none}
 body{padding:calc(env(safe-area-inset-top) + 10px) 16px calc(env(safe-area-inset-bottom) + 20px)}
 button{font:inherit;color:inherit;cursor:pointer}
 svg{width:24px;height:24px;flex:none}
@@ -25,7 +35,11 @@ header{display:flex;align-items:center;justify-content:space-between}
 h1{font-size:20px;font-weight:600;margin:0}
 .icon-btn{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;padding:0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
-.lbl{font-size:13px;color:var(--muted);margin:0 0 4px}
+.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.voice-row{display:flex;align-items:center;gap:8px;margin-top:12px}
+.voice-row select{flex:1;min-width:0;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);padding:0 10px;font:inherit;font-size:16px}
+.voice-lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.voice-hint{font-size:13px;color:var(--muted);margin:6px 0 0}
 .lang-btn{width:100%;min-height:56px;border:1px solid var(--line);border-radius:12px;background:var(--bg);text-align:left;padding:8px 12px;display:flex;align-items:center;gap:8px}
 .lang-btn .names{flex:1;min-width:0}
 .en{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -34,19 +48,19 @@ h1{font-size:20px;font-weight:600;margin:0}
 .swap-row{display:flex;justify-content:center;margin:8px 0}
 .swap{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--accent-bg);color:var(--accent);display:grid;place-items:center;padding:0}
 .rec-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 0 2px}
-.rec{width:124px;height:124px;border-radius:50%;border:3px solid var(--rec);background:var(--rec-bg);color:var(--rec);display:grid;place-items:center;padding:0}
+.rec{width:124px;height:124px;border-radius:50%;border:3px solid var(--accent);background:var(--accent-bg);color:var(--accent);display:grid;place-items:center;padding:0;box-shadow:0 0 0 5px var(--bg),0 0 0 7px var(--gold-hi)}
 .rec svg{width:44px;height:44px}
-.rec.recording{background:var(--rec);color:#fff;animation:pulse 1.3s infinite}
+.rec.recording{background:var(--rec);border-color:var(--rec);color:#fff;animation:pulse 1.3s infinite}
 .rec.busy{border-color:var(--line);background:var(--bg);color:var(--muted)}
 .rec.busy svg{animation:spin 1s linear infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(217,48,37,.45)}70%{box-shadow:0 0 0 20px rgba(217,48,37,0)}100%{box-shadow:0 0 0 0 rgba(217,48,37,0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 .status{font-size:15px;color:var(--muted);min-height:24px;text-align:center}
 .play{width:100%;height:66px;border-radius:16px;border:2px dashed var(--line);background:transparent;color:var(--muted);font-size:19px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px}
-.play.ready{border:2px solid var(--ok);background:var(--ok-bg);color:var(--ok)}
+.play.ready{border:2px solid var(--accent);background:var(--accent);color:var(--on-accent)}
 .play.ready.flashy{animation:glow 1s 2}
 @keyframes glow{50%{transform:scale(1.03)}}
-.out .k{font-size:12px;color:var(--muted);margin:0}
+.out .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
 .heard{color:var(--muted);margin:2px 0 12px;word-break:break-word;white-space:pre-wrap}
 .translation{font-size:23px;font-weight:600;margin:2px 0 0;word-break:break-word;white-space:pre-wrap;line-height:1.4}
 .note,.error{border-radius:12px;padding:10px 12px;font-size:14px}
@@ -70,7 +84,10 @@ h1{font-size:20px;font-weight:600;margin:0}
 .row{display:flex;gap:8px}
 .field{flex:1;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);padding:0 12px;font-size:16px;min-width:0}
 .btn{height:48px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 16px;font-weight:600}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.field.area{height:auto;min-height:72px;width:100%;padding:10px 12px;resize:vertical;font:inherit;font-size:16px}
+.note strong{font-weight:600}
+.note .actions{display:flex;flex-wrap:wrap;gap:8px}
 .radio{display:flex;align-items:flex-start;gap:10px;padding:10px 0;font-weight:400!important}
 .radio input{width:20px;height:20px;margin-top:2px}
 .radio small{display:block;color:var(--muted);font-size:13px}
@@ -81,6 +98,10 @@ a{color:var(--accent)}
 </style>
 </head>
 <body>
+<div class="wb-bar">
+  <a class="wb-brand" href="https://www.wong.cpa/"><svg viewBox="0 0 200 200" aria-hidden="true"><rect width="200" height="200" rx="14" fill="#0F2A3D"/><polyline points="45,96 75,140 111,60" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="square"/><polyline points="89,96 119,140 155,60" fill="none" stroke="#C9A45C" stroke-width="12" stroke-linecap="square"/></svg><span>Jimmy Wong, CPA</span></a>
+  <a class="wb-back" href="https://www.wong.cpa/#projects">&larr; All tools</a>
+</div>
 <div class="app">
   <header>
     <h1>Translate</h1>
@@ -93,6 +114,16 @@ a{color:var(--accent)}
     <div class="swap-row"><button class="swap" id="swapBtn" aria-label="Swap languages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg></button></div>
     <p class="lbl">To</p>
     <button class="lang-btn" id="toBtn"><span class="names"><span class="en" id="toEn"></span><span class="nat" id="toNat"></span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+    <div class="voice-row">
+      <span class="voice-lbl">Voice</span>
+      <select id="voiceSel" aria-label="Voice for the translation"></select>
+      <button class="icon-btn" id="previewBtn" aria-label="Preview voice"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z"/></svg></button>
+    </div>
+    <p class="voice-hint" id="voiceHint"></p>
+  </div>
+
+  <div id="demoBox" class="note hidden"><strong>Demo mode.</strong> This phone has no Gemini key yet, so tapping the mic plays a sample translation instead of your own words. Phone voices only.
+    <div class="actions"><button id="demoKeyGuide">How to get a key</button><button id="demoEnterKey">Enter a key</button></div>
   </div>
 
   <div class="rec-wrap">
@@ -142,14 +173,12 @@ a{color:var(--accent)}
         <button class="btn" id="keyTest">Test</button>
       </div>
       <p id="keyMsg" style="margin-top:8px"></p>
-      <p style="margin-top:8px">The key is saved only on this phone. Get one at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.</p>
+      <p style="margin-top:8px">The key is saved only on this phone. <a href="key-guide.html">How do I get a key?</a></p>
     </div>
     <div class="card">
-      <label>Voice</label>
-      <label class="radio"><input type="radio" name="voice" value="auto"><span>Phone voice<small>Fastest. Uses Gemini's voice only if this phone has no voice for the language.</small></span></label>
-      <label class="radio"><input type="radio" name="voice" value="gemini"><span>Always Gemini voice<small>More natural, a few seconds slower.</small></span></label>
-      <label for="rate" style="margin-top:8px">Speaking speed <span id="rateOut" style="font-weight:400;color:var(--muted)"></span></label>
+      <label for="rate">Speaking speed <span id="rateOut" style="font-weight:400;color:var(--muted)"></span></label>
       <input id="rate" type="range" min="0.6" max="1.3" step="0.05">
+      <p style="margin-top:6px">Choose the voice itself on the main screen, under "To".</p>
     </div>
     <div class="card">
       <details>
@@ -157,6 +186,9 @@ a{color:var(--accent)}
         <label for="modelInput" style="margin-top:10px">Translation model</label>
         <input class="field" id="modelInput" style="width:100%" autocomplete="off" autocapitalize="off" spellcheck="false">
         <p style="margin-top:6px">Leave as is unless Google retires this model. Older fallbacks are tried automatically.</p>
+        <label for="styleInput" style="margin-top:16px">Voice style (Gemini)</label>
+        <textarea class="field area" id="styleInput" maxlength="200" placeholder="e.g. dramatic and theatrical, like Moira Rose" autocapitalize="sentences"></textarea>
+        <p style="margin-top:6px">Describe how translations should be spoken. When this is filled in, every playback uses a Gemini voice, even if this phone has its own, which uses more of your Gemini quota. Only the delivery changes, never the words. Leave empty for normal voices.</p>
         <button class="btn" id="keyRemove" style="margin-top:12px">Remove saved key</button>
       </details>
     </div>
@@ -173,6 +205,32 @@ const FALLBACK_MODELS = ['gemini-3.1-flash-lite', 'gemini-2.5-flash-lite'];
 const TTS_LITE = 'gemini-3.8-flash-lite-tts';
 const TTS_FULL = 'gemini-3.8-flash-tts';
 const MAX_SECONDS = 60;
+
+/* Gemini's prebuilt voices with Google's one-word description of each */
+const GEMINI_VOICES = [['Achernar','Soft'],['Achird','Friendly'],['Algenib','Gravelly'],['Algieba','Smooth'],['Alnilam','Firm'],
+  ['Aoede','Breezy'],['Autonoe','Bright'],['Callirrhoe','Easy-going'],['Charon','Informative'],['Despina','Smooth'],
+  ['Enceladus','Breathy'],['Erinome','Clear'],['Fenrir','Excitable'],['Gacrux','Mature'],['Iapetus','Clear'],
+  ['Kore','Firm'],['Laomedeia','Upbeat'],['Leda','Youthful'],['Orus','Firm'],['Puck','Upbeat'],
+  ['Pulcherrima','Forward'],['Rasalgethi','Informative'],['Sadachbia','Lively'],['Sadaltager','Knowledgeable'],['Schedar','Even'],
+  ['Sulafat','Warm'],['Umbriel','Easy-going'],['Vindemiatrix','Gentle'],['Zephyr','Bright'],['Zubenelgenubi','Casual']];
+
+/* Demo mode (no key): one sample sentence per language, played with phone voices only */
+const DEMO = {
+  'en': 'Excuse me, how do I get to the train station?',
+  'yue-HK': '唔該，請問火車站點去呀？',
+  'es-ES': 'Perdona, ¿cómo llego a la estación de tren?',
+  'es-419': 'Disculpe, ¿cómo llego a la estación de tren?',
+  'zh-CN': '请问，火车站怎么走？',
+  'zh-TW': '請問，火車站怎麼走？',
+  'ja': 'すみません、駅へはどう行けばいいですか？',
+  'ko': '실례합니다, 기차역에 어떻게 가나요?',
+  'fr': 'Excusez-moi, comment aller à la gare ?',
+  'fr-CA': 'Excusez-moi, comment je fais pour aller à la gare?',
+  'it': 'Scusi, come arrivo alla stazione dei treni?',
+  'de': 'Entschuldigung, wie komme ich zum Bahnhof?',
+  'pt-BR': 'Com licença, como chego à estação de trem?',
+  'pt-PT': 'Desculpe, como chego à estação de comboios?'
+};
 
 /* [id, English name, native name, phone-voice codes, flags (s = exact voice only, F = needs full Gemini TTS), extra search words] */
 const RAW = [
@@ -313,6 +371,8 @@ const store = {
   del(k) { try { localStorage.removeItem(k); } catch (e) {} }
 };
 const getKey = () => store.get('gt_key', '').trim();
+const getStyle = () => store.get('gt_style', '').trim();
+const voiceKey = lang => 'gt_voice_' + lang.id;
 
 /* ---------- state ---------- */
 const S = {
@@ -352,7 +412,9 @@ function renderLangs() {
   $('#fromEn').textContent = f.en; $('#fromNat').textContent = f.nat;
   $('#toEn').textContent = t.en; $('#toNat').textContent = t.nat;
   store.set('gt_from', S.from); store.set('gt_to', S.to);
+  renderVoices();
 }
+function renderDemo() { $('#demoBox').classList.toggle('hidden', !!getKey()); }
 function renderRec() {
   const b = el.recBtn;
   b.classList.toggle('recording', !!S.rec);
@@ -438,7 +500,7 @@ function openSettings(firstRun) {
   $('#firstRun').classList.toggle('hidden', !firstRun);
   $('#keyInput').value = getKey();
   $('#keyMsg').textContent = '';
-  document.querySelectorAll('input[name=voice]').forEach(r => r.checked = r.value === store.get('gt_voice', 'auto'));
+  $('#styleInput').value = getStyle();
   $('#rate').value = store.get('gt_rate', '1');
   $('#rateOut').textContent = Number($('#rate').value).toFixed(2) + '×';
   $('#modelInput').value = store.get('gt_model', DEFAULT_MODEL);
@@ -456,10 +518,13 @@ $('#keySave').onclick = () => {
   const k = $('#keyInput').value.trim();
   if (!k) { $('#keyMsg').textContent = 'Paste a key first.'; return; }
   store.set('gt_key', k); $('#keyMsg').textContent = 'Saved. Testing…'; testKey();
+  renderDemo(); renderVoices();
 };
 $('#keyTest').onclick = testKey;
-$('#keyRemove').onclick = () => { store.del('gt_key'); $('#keyInput').value = ''; $('#keyMsg').textContent = 'Key removed from this phone.'; };
-document.querySelectorAll('input[name=voice]').forEach(r => r.onchange = () => store.set('gt_voice', r.value));
+$('#keyRemove').onclick = () => { store.del('gt_key'); $('#keyInput').value = ''; $('#keyMsg').textContent = 'Key removed from this phone.'; renderDemo(); renderVoices(); };
+$('#styleInput').oninput = e => { store.set('gt_style', e.target.value.trim()); renderVoiceHint(); };
+$('#demoKeyGuide').onclick = () => { location.href = 'key-guide.html'; };
+$('#demoEnterKey').onclick = () => openSettings(true);
 $('#rate').oninput = e => { store.set('gt_rate', e.target.value); $('#rateOut').textContent = Number(e.target.value).toFixed(2) + '×'; };
 async function testKey() {
   const k = $('#keyInput').value.trim() || getKey();
@@ -575,7 +640,29 @@ function encodeWav(samples, rate) {
 function abToB64(ab) { const b = new Uint8Array(ab); let s = ''; for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(s); }
 function b64ToBytes(b64) { const s = atob(b64); const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; }
 
-el.recBtn.onclick = () => { if (S.busy) return; if (S.rec) stopRecording(); else startRecording(); };
+el.recBtn.onclick = () => {
+  if (S.busy) return;
+  if (S.rec) { stopRecording(); return; }
+  if (!getKey()) { runDemo(); return; }
+  startRecording();
+};
+
+/* ---------- demo mode (no key) ---------- */
+function runDemo() {
+  clearError(); clearNote(); resetOutput();
+  const from = S.from === 'auto' ? byId('en') : byId(S.from), to = byId(S.to);
+  if (!DEMO[to.id]) {
+    const langs = Object.keys(DEMO).map(id => byId(id).en).join(', ');
+    showNote('The demo has a sample sentence in: ' + esc(langs) + '. Pick one of these under "To", or add a Gemini key to translate your own words.');
+    return;
+  }
+  const src = DEMO[from.id] ? from : byId('en');
+  S.result = { heard: DEMO[src.id], translation: DEMO[to.id], lang: to };
+  el.heard.textContent = DEMO[src.id]; el.trans.textContent = DEMO[to.id];
+  el.trans.lang = to.speech[0] || to.id;
+  el.outCard.classList.remove('hidden');
+  prepareVoice();
+}
 document.addEventListener('visibilitychange', () => { if (document.hidden && S.rec) stopRecording(); });
 
 /* ---------- translation ---------- */
@@ -653,18 +740,57 @@ function loadVoices() {
   return voicesP;
 }
 const NOVELTY = /albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|deranged|hysterical|grandma|grandpa|eddy|flo|reed|rocko|sandy|shelley/i;
-async function findPhoneVoice(lang) {
-  const voices = await loadVoices(); if (!voices.length) return null;
+/* All phone voices for a language, best first. Strict languages (Cantonese, Castellano,
+   Mandarin) only accept exact voice codes so a wrong dialect is never offered. */
+async function phoneVoicesFor(lang) {
+  const voices = await loadVoices(); if (!voices.length) return [];
   const norm = s => (s || '').toLowerCase().replace(/_/g, '-');
   const score = v => (/premium|enhanced|neural|natural/i.test(v.name) ? 3 : 0) + (v.localService ? 1 : 0) + (v.default ? 1 : 0) - (NOVELTY.test(v.name) ? 10 : 0);
-  const best = arr => arr.sort((a, b) => score(b) - score(a))[0];
-  for (const c of lang.speech.map(norm)) { const m = voices.filter(v => norm(v.lang) === c); if (m.length) return best(m); }
-  if (!lang.strict) {
-    const base = norm(lang.speech[0]).split('-')[0];
-    const m = voices.filter(v => norm(v.lang).split('-')[0] === base); if (m.length) return best(m);
+  const codes = lang.speech.map(norm);
+  let m = voices.filter(v => codes.includes(norm(v.lang)));
+  if (!m.length && !lang.strict) {
+    const base = codes[0].split('-')[0];
+    m = voices.filter(v => norm(v.lang).split('-')[0] === base);
   }
-  return null;
+  return m.filter(v => !NOVELTY.test(v.name))
+    .sort((a, b) => codes.indexOf(norm(a.lang)) - codes.indexOf(norm(b.lang)) || score(b) - score(a));
 }
+async function findPhoneVoice(lang) { return (await phoneVoicesFor(lang))[0] || null; }
+
+/* ---------- voice picker ---------- */
+let voiceRender = 0;
+async function renderVoices() {
+  const lang = byId(S.to), sel = $('#voiceSel'), ticket = ++voiceRender;
+  const phone = await phoneVoicesFor(lang);
+  if (ticket !== voiceRender) return; // a newer render started while voices loaded
+  const cur = store.get(voiceKey(lang), 'auto'), keyed = !!getKey();
+  let html = '<option value="auto">Automatic (best available)</option><optgroup label="Phone voices (free)">';
+  html += phone.length
+    ? phone.map(v => `<option value="p:${esc(v.voiceURI)}">${esc(v.name)} · ${esc(v.lang)}</option>`).join('')
+    : '<option disabled>No phone voice for this language</option>';
+  html += '</optgroup><optgroup label="Gemini voices (uses your key)">';
+  html += GEMINI_VOICES.map(([n, d]) => `<option value="g:${n}"${keyed ? '' : ' disabled'}>${n} · ${d}${keyed ? '' : ' (needs a key)'}</option>`).join('');
+  sel.innerHTML = html + '</optgroup>';
+  const ok = [...sel.options].some(o => o.value === cur && !o.disabled);
+  sel.value = ok ? cur : 'auto';
+  renderVoiceHint();
+}
+function renderVoiceHint() {
+  const v = $('#voiceSel').value || 'auto', hint = $('#voiceHint');
+  if (getKey() && getStyle()) hint.textContent = 'Voice style is on, so a Gemini voice is used (uses your key).';
+  else if (v.startsWith('p:')) hint.textContent = 'Phone voice: free, plays instantly.';
+  else if (v.startsWith('g:')) hint.textContent = 'Gemini voice: uses your key for each new translation.';
+  else hint.textContent = getKey() ? 'Uses this phone\'s voice if it has one, otherwise a Gemini voice.' : 'Uses this phone\'s voice.';
+}
+$('#voiceSel').onchange = e => {
+  store.set(voiceKey(byId(S.to)), e.target.value);
+  renderVoiceHint();
+  if (S.result && S.result.lang.id === S.to && !S.busy) { // re-voice the current translation
+    if (S.audioUrl) { URL.revokeObjectURL(S.audioUrl); S.audioUrl = null; }
+    S.phoneVoice = null; setReady(false); clearError(); clearNote(); prepareVoice();
+  }
+};
+if ('speechSynthesis' in window) speechSynthesis.addEventListener('voiceschanged', () => { voicesP = null; renderVoices(); });
 const gVoiceCache = {};
 async function pickGeminiVoice(lang) {
   if (gVoiceCache[lang.id]) return gVoiceCache[lang.id];
@@ -695,13 +821,15 @@ function pcmToWav(bytes, rate) {
   v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, 'data'); v.setUint32(40, bytes.length, true);
   return new Blob([head, bytes], { type: 'audio/wav' });
 }
-async function geminiVoice(text, lang) {
-  const voice = await pickGeminiVoice(lang);
+async function geminiVoice(text, lang, voiceName, style) {
+  const voice = voiceName || await pickGeminiVoice(lang);
+  // A style changes only the delivery; the words to speak follow "Say:".
+  const spoken = style ? 'In this speaking style: ' + style + '\nSay: ' + text : text;
   const order = lang.full ? [TTS_FULL, TTS_LITE] : [TTS_LITE, TTS_FULL];
   let last;
   for (const model of order) {
     for (const v of [...new Set([voice, 'Kore'])]) {
-      const body = { model, input: [{ type: 'user_input', content: [{ type: 'text', text }] }], response_format: { type: 'audio' }, generation_config: { speech_config: [{ voice: v }] } };
+      const body = { model, input: [{ type: 'user_input', content: [{ type: 'text', text: spoken }] }], response_format: { type: 'audio' }, generation_config: { speech_config: [{ voice: v }] } };
       try {
         const d = await gfetch('interactions', { method: 'POST', body: JSON.stringify(body) }, 60000);
         const a = findAudioPart(d); if (!a) throw mkErr(0, 'No audio came back.', JSON.stringify(d).slice(0, 300));
@@ -722,16 +850,31 @@ function voiceTip(lang) {
   showNote('This phone has no ' + esc(lang.en) + ' voice, so Gemini\'s voice is used (a little slower). To add one: <br>iPhone: Settings → Accessibility → Spoken Content → Voices.<br>Android: Settings → search "Text-to-speech" → Google → install voice data.<div><button id="tipOk">Got it</button></div>');
   $('#tipOk').onclick = () => { store.set(k, '1'); clearNote(); };
 }
+/* Route playback by the voice dropdown: automatic, a specific phone voice, or a Gemini voice.
+   A voice style (Advanced) always uses Gemini. Demo mode (no key) uses phone voices only. */
 async function prepareVoice() {
+  const { lang } = S.result;
+  const choice = store.get(voiceKey(lang), 'auto'), demo = !getKey(), style = demo ? '' : getStyle();
+  const gemName = choice.startsWith('g:') ? choice.slice(2) : null;
+  if (style || (gemName && !demo)) return useGemini(gemName, style, false);
+  let v = null;
+  if (choice.startsWith('p:')) v = (await phoneVoicesFor(lang)).find(x => x.voiceURI === choice.slice(2)) || null;
+  if (!v) v = await findPhoneVoice(lang);
+  if (v) { S.phoneVoice = v; setReady(true); setStatus(demo ? 'Sample ready. Tap play.' : 'Ready. Tap play.'); return; }
+  if (demo) {
+    setStatus('');
+    showNote('This phone has no ' + esc(lang.en) + ' voice. In demo mode only phone voices can play, so read the sample below.');
+    return;
+  }
+  return useGemini(null, '', true);
+}
+async function useGemini(voiceName, style, showTip) {
   const { translation, lang } = S.result;
-  const mode = store.get('gt_voice', 'auto');
-  const v = mode === 'auto' ? await findPhoneVoice(lang) : null;
-  if (v) { S.phoneVoice = v; setReady(true); setStatus('Ready. Tap play.'); return; }
   setStatus('Getting voice…');
   try {
-    S.audioUrl = await geminiVoice(translation, lang);
+    S.audioUrl = await geminiVoice(translation, lang, voiceName, style);
     setReady(true); setStatus('Ready. Tap play.');
-    if (mode === 'auto') voiceTip(lang);
+    if (showTip) voiceTip(lang);
   } catch (e) {
     setStatus('');
     showError('No voice is available for ' + lang.en + ' right now. The translation text is shown below.', { detail: e.raw || e.userMsg });
@@ -764,13 +907,45 @@ el.playBtn.onclick = () => {
     speechSynthesis.speak(u);
   }
 };
+/* ---------- voice preview ---------- */
+// Phone previews are free; each Gemini preview is generated once and reused while the app is open.
+const previewPlayer = new Audio(); previewPlayer.setAttribute('playsinline', '');
+const previewCache = {};
+$('#previewBtn').onclick = async () => {
+  const lang = byId(S.to), choice = $('#voiceSel').value || 'auto', keyed = !!getKey(), style = keyed ? getStyle() : '';
+  const text = (S.result && S.result.lang.id === lang.id) ? S.result.translation : (DEMO[lang.id] || lang.nat);
+  try { speechSynthesis.cancel(); } catch (e) {}
+  previewPlayer.pause();
+  if (!style && !choice.startsWith('g:')) {
+    let v = choice.startsWith('p:') ? (await phoneVoicesFor(lang)).find(x => x.voiceURI === choice.slice(2)) : null;
+    if (!v) v = await findPhoneVoice(lang);
+    if (v) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.voice = v; u.lang = v.lang; u.rate = rate();
+      try { speechSynthesis.resume(); } catch (e) {}
+      speechSynthesis.speak(u);
+      return;
+    }
+    if (!keyed) { setStatus('This phone has no ' + lang.en + ' voice.'); return; }
+  }
+  if (!keyed) { setStatus('Gemini voices need a key.'); return; }
+  const gem = choice.startsWith('g:') ? choice.slice(2) : null;
+  const k = [lang.id, gem || 'auto', style, text].join('|');
+  try {
+    if (!previewCache[k]) { setStatus('Getting preview…'); previewCache[k] = await geminiVoice(text, lang, gem, style); }
+    setStatus('');
+    previewPlayer.src = previewCache[k]; previewPlayer.playbackRate = rate();
+    await previewPlayer.play();
+  } catch (e) { setStatus(''); showError(e.userMsg || 'Could not preview that voice.', { detail: e.raw }); }
+};
+
 el.player.addEventListener('playing', () => { el.playLabel.textContent = 'Playing…'; });
 el.player.addEventListener('ended', () => { el.playLabel.textContent = 'Play again'; });
 el.player.addEventListener('pause', () => { if (!el.player.ended) el.playLabel.textContent = 'Play translation'; });
 
 /* ---------- init ---------- */
-renderLangs(); renderRec(); loadVoices();
-if (!getKey()) openSettings(true);
+if (navigator.standalone) document.documentElement.classList.add('standalone'); // iOS home-screen launch
+renderLangs(); renderRec(); renderDemo(); loadVoices().then(renderVoices);
 </script>
 </body>
 </html>

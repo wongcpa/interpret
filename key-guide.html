@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gemini Key Guide</title>
+<meta name="theme-color" content="#0F2A3D">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F6F4;--card:#fff;--text:#0d0d0d;--muted:#6b7280;--line:#d1cdc4;--accent:#0F2A3D;--accent-bg:#f5f0e8;--on-accent:#fff;--gold:#7A5F2C;--mono:"IBM Plex Mono",ui-monospace,monospace;--head:"Sora",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0a1823;--card:#0F2A3D;--text:#eef1f4;--muted:#9fb0bf;--line:#24425a;--accent:#C9A45C;--accent-bg:#17364d;--on-accent:#0F2A3D;--gold:#C9A45C}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans","PingFang HK","Hiragino Sans","Noto Sans CJK TC",sans-serif}
+body{padding:0 16px calc(env(safe-area-inset-bottom) + 28px)}
+.wb-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0F2A3D;margin:0 -16px 18px;padding:calc(env(safe-area-inset-top) + 9px) 16px 9px}
+.wb-brand{display:inline-flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-family:var(--head);font-weight:600;font-size:15px}
+.wb-brand svg{width:24px;height:24px;border-radius:4px}
+.wb-back{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#C9A45C;text-decoration:none}
+main{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.langs{display:flex;flex-wrap:wrap;gap:6px}
+.langs button{font-family:var(--mono);font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:3px;background:var(--card);color:var(--muted);cursor:pointer}
+.langs button.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+h1{font-family:var(--head);font-size:26px;line-height:1.25;margin:4px 0 0;color:var(--text)}
+.intro{color:var(--muted);margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 18px 14px}
+.card h2{font-family:var(--head);font-size:18px;margin:0 0 10px}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:0 0 4px}
+ol,ul{margin:0;padding-left:22px}
+li{margin:0 0 8px}
+.note{background:var(--accent-bg);border-left:3px solid var(--gold);padding:10px 12px;border-radius:0 8px 8px 0;font-size:14px;margin-top:10px}
+a{color:var(--gold)}
+.back{display:inline-block;margin-top:4px;font-weight:600;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wb-bar">
+  <a class="wb-brand" href="https://www.wong.cpa/"><svg viewBox="0 0 200 200" aria-hidden="true"><rect width="200" height="200" rx="14" fill="#0F2A3D"/><polyline points="45,96 75,140 111,60" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="square"/><polyline points="89,96 119,140 155,60" fill="none" stroke="#C9A45C" stroke-width="12" stroke-linecap="square"/></svg><span>Jimmy Wong, CPA</span></a>
+  <a class="wb-back" href="https://www.wong.cpa/#projects">&larr; All tools</a>
+</div>
+<main>
+  <div class="langs" id="langs" role="group" aria-label="Language"></div>
+  <h1 id="title"></h1>
+  <p class="intro" id="intro"></p>
+  <section class="card"><p class="tag">1</p><h2 id="s1"></h2><ol id="s1l"></ol></section>
+  <section class="card"><p class="tag">2</p><h2 id="s2"></h2><ol id="s2l"></ol><div class="note" id="s2n"></div></section>
+  <section class="card"><p class="tag">3</p><h2 id="s3"></h2><ul id="s3l"></ul></section>
+  <a class="back" id="back" href="./"></a>
+</main>
+<script>
+'use strict';
+const APP = '<a href="./">www.wong.cpa/interpret</a>';
+const STUDIO = '<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>';
+const LANGS = [['en','EN'],['zh','简体'],['zht','繁體'],['ja','日本語'],['es','ES'],['it','IT'],['fr','FR']];
+const HTML_LANG = { en: 'en', zh: 'zh-Hans', zht: 'zh-Hant', ja: 'ja', es: 'es-ES', it: 'it', fr: 'fr' };
+
+const T = {
+en: {
+  title: 'How to get and add a Gemini key',
+  intro: 'The translator uses Google\'s Gemini to translate. It needs a key: a long code that lets the app use Gemini. You only set it up once on each phone.',
+  s1: 'Someone gave you a key',
+  s1l: ['Open the translator: {app} (on iPhone use Safari, on Android use Chrome).',
+        'Tap the gear ⚙ at the top right.',
+        'Press and hold in the "Gemini API key" box, then tap Paste.',
+        'Tap "Save key". When you see "Key works.", close Settings with ✕.'],
+  s2: 'Get your own key (free to start)',
+  s2l: ['Go to {studio} and sign in with a Google account.',
+        'Accept the terms if asked.',
+        'Tap "Create API key". If asked, choose or create a project.',
+        'Copy the key (it starts with "AIza").',
+        'Paste it into the translator using the steps above.'],
+  s2n: 'The free tier has usage limits, and Google may use free-tier requests to improve its products. For privacy, set up billing on the project in AI Studio; normal personal use usually costs very little.',
+  s3: 'Keep your key safe',
+  s3l: ['Treat the key like a password: it can run up charges on the account it belongs to.',
+        'Never post it online or put it in a shared document.',
+        'The translator saves the key only on this phone. To remove it: Settings → Advanced → Remove saved key.',
+        'If a key leaks, delete it in AI Studio and create a new one.',
+        'Sharing your key with family? In Google Cloud, restrict it to the Generative Language API and the website https://www.wong.cpa/*, and set a budget alert.'],
+  back: '← Back to the translator'
+},
+zh: {
+  title: '如何获取并添加 Gemini 密钥',
+  intro: '这个翻译工具使用 Google 的 Gemini 进行翻译，需要一个密钥（一串让应用使用 Gemini 的长代码）。每部手机只需设置一次。',
+  s1: '有人给了你密钥',
+  s1l: ['打开翻译工具：{app}（iPhone 请用 Safari，Android 请用 Chrome）。',
+        '点右上角的齿轮 ⚙。',
+        '在“Gemini API key”框内长按，然后点“粘贴”。',
+        '点“Save key”。看到“Key works.”后，点 ✕ 关闭设置。'],
+  s2: '获取你自己的密钥（可免费开始）',
+  s2l: ['前往 {studio}，用 Google 账号登录。',
+        '如有提示，接受服务条款。',
+        '点“Create API key”。如有提示，选择或新建一个项目。',
+        '复制密钥（以“AIza”开头）。',
+        '按上面的步骤粘贴到翻译工具中。'],
+  s2n: '免费层级有用量限制，且 Google 可能会使用免费层级的请求来改进其产品。如重视隐私，请在 AI Studio 中为该项目开通结算；个人日常使用的费用通常很低。',
+  s3: '保管好你的密钥',
+  s3l: ['把密钥当作密码对待：它可能在所属账号上产生费用。',
+        '切勿在网上公开，也不要放进共享文档。',
+        '翻译工具只把密钥保存在这部手机上。如要删除：Settings → Advanced → Remove saved key。',
+        '如果密钥泄露，请在 AI Studio 中删除它并新建一个。',
+        '要和家人共用你的密钥？请在 Google Cloud 中将其限制为 Generative Language API 和网站 https://www.wong.cpa/*，并设置预算提醒。'],
+  back: '← 返回翻译工具'
+},
+zht: {
+  title: '如何取得並加入 Gemini 金鑰',
+  intro: '這個翻譯工具使用 Google 的 Gemini 進行翻譯，需要一個金鑰（一串讓應用程式使用 Gemini 的長代碼）。每部手機只需設定一次。',
+  s1: '有人給了你金鑰',
+  s1l: ['開啟翻譯工具：{app}（iPhone 請用 Safari，Android 請用 Chrome）。',
+        '按右上角的齒輪 ⚙。',
+        '在「Gemini API key」欄內長按，然後按「貼上」。',
+        '按「Save key」。看到「Key works.」後，按 ✕ 關閉設定。'],
+  s2: '取得你自己的金鑰（可免費開始）',
+  s2l: ['前往 {studio}，用 Google 帳戶登入。',
+        '如有提示，接受服務條款。',
+        '按「Create API key」。如有提示，選擇或建立一個專案。',
+        '複製金鑰（以「AIza」開頭）。',
+        '按照上面的步驟貼到翻譯工具。'],
+  s2n: '免費方案有用量限制，而且 Google 可能會使用免費方案的請求來改進其產品。如重視隱私，請在 AI Studio 為該專案啟用計費；個人日常使用的費用通常很低。',
+  s3: '妥善保管你的金鑰',
+  s3l: ['把金鑰當作密碼看待：它可能在所屬帳戶產生費用。',
+        '切勿在網上公開，也不要放進共用文件。',
+        '翻譯工具只把金鑰儲存在這部手機上。如要刪除：Settings → Advanced → Remove saved key。',
+        '如果金鑰外洩，請在 AI Studio 刪除它並建立新的金鑰。',
+        '要與家人共用你的金鑰？請在 Google Cloud 將它限制為 Generative Language API 及網站 https://www.wong.cpa/*，並設定預算提醒。'],
+  back: '← 返回翻譯工具'
+},
+ja: {
+  title: 'Gemini APIキーの取得と設定方法',
+  intro: 'この翻訳ツールは Google の Gemini を使って翻訳します。そのためにキー（アプリが Gemini を使うための長いコード）が必要です。設定はスマートフォンごとに一度だけです。',
+  s1: 'キーを受け取った場合',
+  s1l: ['翻訳ツールを開きます：{app}（iPhone は Safari、Android は Chrome で）。',
+        '右上の歯車 ⚙ をタップします。',
+        '「Gemini API key」の欄を長押しし、「ペースト」をタップします。',
+        '「Save key」をタップします。「Key works.」と表示されたら、✕ で設定を閉じます。'],
+  s2: '自分のキーを取得する（無料で始められます）',
+  s2l: ['{studio} を開き、Google アカウントでログインします。',
+        '利用規約が表示されたら同意します。',
+        '「Create API key」をタップします。求められたら、プロジェクトを選択または作成します。',
+        'キーをコピーします（「AIza」で始まります）。',
+        '上の手順で翻訳ツールに貼り付けます。'],
+  s2n: '無料枠には利用上限があり、Google が無料枠のリクエストを製品改善に使用する場合があります。プライバシーを重視する場合は、AI Studio でプロジェクトの請求設定を行ってください。個人の通常の利用なら、費用はふつうごくわずかです。',
+  s3: 'キーを安全に管理する',
+  s3l: ['キーはパスワードと同じように扱ってください。持ち主のアカウントに料金が発生する可能性があります。',
+        'ネット上に公開したり、共有ドキュメントに貼ったりしないでください。',
+        '翻訳ツールはキーをこのスマートフォンにだけ保存します。削除するには：Settings → Advanced → Remove saved key。',
+        'キーが漏れた場合は、AI Studio で削除して新しいキーを作成してください。',
+        '自分のキーを家族と共有する場合は、Google Cloud でキーを Generative Language API とウェブサイト https://www.wong.cpa/* に制限し、予算アラートを設定してください。'],
+  back: '← 翻訳ツールに戻る'
+},
+es: {
+  title: 'Cómo conseguir y añadir una clave de Gemini',
+  intro: 'El traductor usa Gemini, de Google, para traducir. Necesita una clave: un código largo que permite a la app usar Gemini. Solo hay que configurarla una vez en cada móvil.',
+  s1: 'Alguien te ha dado una clave',
+  s1l: ['Abre el traductor: {app} (en iPhone usa Safari; en Android, Chrome).',
+        'Toca el engranaje ⚙ arriba a la derecha.',
+        'Mantén pulsado el campo «Gemini API key» y toca «Pegar».',
+        'Toca «Save key». Cuando veas «Key works.», cierra los ajustes con ✕.'],
+  s2: 'Consigue tu propia clave (gratis para empezar)',
+  s2l: ['Ve a {studio} e inicia sesión con una cuenta de Google.',
+        'Si te lo pide, acepta las condiciones.',
+        'Toca «Create API key». Si te lo pide, elige o crea un proyecto.',
+        'Copia la clave (empieza por «AIza»).',
+        'Pégala en el traductor siguiendo los pasos de arriba.'],
+  s2n: 'El nivel gratuito tiene límites de uso y Google puede usar las solicitudes del nivel gratuito para mejorar sus productos. Si te importa la privacidad, activa la facturación del proyecto en AI Studio; el uso personal habitual suele costar muy poco.',
+  s3: 'Guarda bien tu clave',
+  s3l: ['Trata la clave como una contraseña: puede generar cargos en la cuenta a la que pertenece.',
+        'No la publiques nunca en internet ni la pongas en un documento compartido.',
+        'El traductor guarda la clave solo en este móvil. Para borrarla: Settings → Advanced → Remove saved key.',
+        'Si la clave se filtra, bórrala en AI Studio y crea una nueva.',
+        '¿Vas a compartir tu clave con tu familia? En Google Cloud, restríngela a la Generative Language API y al sitio web https://www.wong.cpa/*, y configura una alerta de presupuesto.'],
+  back: '← Volver al traductor'
+},
+it: {
+  title: 'Come ottenere e inserire una chiave Gemini',
+  intro: 'Il traduttore usa Gemini di Google per tradurre. Serve una chiave: un codice lungo che permette all\'app di usare Gemini. Va configurata una sola volta su ogni telefono.',
+  s1: 'Qualcuno ti ha dato una chiave',
+  s1l: ['Apri il traduttore: {app} (su iPhone usa Safari, su Android Chrome).',
+        'Tocca l\'ingranaggio ⚙ in alto a destra.',
+        'Tieni premuto nel campo «Gemini API key» e tocca «Incolla».',
+        'Tocca «Save key». Quando compare «Key works.», chiudi le impostazioni con ✕.'],
+  s2: 'Ottieni una chiave tutta tua (si parte gratis)',
+  s2l: ['Vai su {studio} e accedi con un account Google.',
+        'Se richiesto, accetta i termini.',
+        'Tocca «Create API key». Se richiesto, scegli o crea un progetto.',
+        'Copia la chiave (inizia con «AIza»).',
+        'Incollala nel traduttore seguendo i passaggi sopra.'],
+  s2n: 'Il livello gratuito ha limiti di utilizzo e Google può usare le richieste del livello gratuito per migliorare i propri prodotti. Se tieni alla privacy, attiva la fatturazione del progetto in AI Studio; un normale uso personale di solito costa pochissimo.',
+  s3: 'Custodisci la tua chiave',
+  s3l: ['Tratta la chiave come una password: può generare addebiti sull\'account a cui appartiene.',
+        'Non pubblicarla mai online e non inserirla in documenti condivisi.',
+        'Il traduttore salva la chiave solo su questo telefono. Per rimuoverla: Settings → Advanced → Remove saved key.',
+        'Se la chiave viene divulgata, eliminala in AI Studio e creane una nuova.',
+        'Condividi la tua chiave con la famiglia? In Google Cloud limitala alla Generative Language API e al sito https://www.wong.cpa/*, e imposta un avviso di budget.'],
+  back: '← Torna al traduttore'
+},
+fr: {
+  title: 'Obtenir et ajouter une clé Gemini',
+  intro: 'Le traducteur utilise Gemini, de Google, pour traduire. Il a besoin d\'une clé : un long code qui permet à l\'application d\'utiliser Gemini. On la configure une seule fois par téléphone.',
+  s1: 'Quelqu\'un vous a donné une clé',
+  s1l: ['Ouvrez le traducteur : {app} (sur iPhone, utilisez Safari ; sur Android, Chrome).',
+        'Touchez la roue dentée ⚙ en haut à droite.',
+        'Appuyez longuement dans le champ « Gemini API key », puis touchez « Coller ».',
+        'Touchez « Save key ». Quand « Key works. » s\'affiche, fermez les réglages avec ✕.'],
+  s2: 'Obtenir votre propre clé (gratuit pour commencer)',
+  s2l: ['Allez sur {studio} et connectez-vous avec un compte Google.',
+        'Si on vous le demande, acceptez les conditions.',
+        'Touchez « Create API key ». Si on vous le demande, choisissez ou créez un projet.',
+        'Copiez la clé (elle commence par « AIza »).',
+        'Collez-la dans le traducteur en suivant les étapes ci-dessus.'],
+  s2n: 'Le niveau gratuit a des limites d\'utilisation, et Google peut utiliser les requêtes du niveau gratuit pour améliorer ses produits. Si la confidentialité compte pour vous, activez la facturation du projet dans AI Studio ; un usage personnel courant coûte généralement très peu.',
+  s3: 'Protégez votre clé',
+  s3l: ['Traitez la clé comme un mot de passe : elle peut générer des frais sur le compte auquel elle appartient.',
+        'Ne la publiez jamais en ligne et ne la mettez pas dans un document partagé.',
+        'Le traducteur enregistre la clé uniquement sur ce téléphone. Pour la supprimer : Settings → Advanced → Remove saved key.',
+        'Si la clé fuite, supprimez-la dans AI Studio et créez-en une nouvelle.',
+        'Vous partagez votre clé avec votre famille ? Dans Google Cloud, limitez-la à la Generative Language API et au site https://www.wong.cpa/*, et configurez une alerte budgétaire.'],
+  back: '← Retour au traducteur'
+}
+};
+
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fill = s => esc(s).replace('{app}', APP).replace('{studio}', STUDIO);
+
+function phoneLang() {
+  for (const l of navigator.languages || [navigator.language || 'en']) {
+    const c = (l || '').toLowerCase();
+    if (/^zh-(tw|hk|mo)|^zh-hant/.test(c)) return 'zht';
+    if (c.startsWith('zh')) return 'zh';
+    const base = c.split('-')[0];
+    if (T[base]) return base;
+  }
+  return 'en';
+}
+function render(lang) {
+  const t = T[lang];
+  document.documentElement.lang = HTML_LANG[lang];
+  document.getElementById('title').textContent = t.title;
+  document.getElementById('intro').textContent = t.intro;
+  ['s1', 's2', 's3'].forEach(k => {
+    document.getElementById(k).textContent = t[k];
+    document.getElementById(k + 'l').innerHTML = t[k + 'l'].map(x => '<li>' + fill(x) + '</li>').join('');
+  });
+  document.getElementById('s2n').textContent = t.s2n;
+  document.getElementById('back').textContent = t.back;
+  document.querySelectorAll('#langs button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  store.set('gt_guide_lang', lang);
+}
+document.getElementById('langs').innerHTML = LANGS.map(([id, label]) => `<button data-lang="${id}" lang="${HTML_LANG[id]}">${label}</button>`).join('');
+document.getElementById('langs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) render(b.dataset.lang); });
+const asked = new URLSearchParams(location.search).get('lang');
+render(T[asked] ? asked : (T[store.get('gt_guide_lang')] ? store.get('gt_guide_lang') : phoneLang()));
+</script>
+</body>
+</html>

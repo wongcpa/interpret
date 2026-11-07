@@ -2,7 +2,9 @@
 
 A one-screen voice translator for phones. Pick "From" and "To", tap the mic, speak, tap again, then tap Play. Built on the Gemini API (Flash-Lite for translation, the phone's own voice for playback, Gemini's voice as a fallback).
 
-The API key is **not** in this code. Each phone stores its own copy after you paste it in Settings.
+The API key is **not** in this code. Each phone stores its own copy after you paste it in Settings. Without a key the app runs in **demo mode**: tapping the mic plays a sample translation with the phone's voice.
+
+**Key guide for users:** [`key-guide.html`](https://www.wong.cpa/interpret/key-guide.html), a step-by-step page in English, 简体中文, 繁體中文, 日本語, Español, Italiano and Français. It opens in the phone's language; add `?lang=zht` (or `zh`, `ja`, `es`, `it`, `fr`, `en`) to force one.
 
 ## 1. Turn on GitHub Pages
 
@@ -39,6 +41,8 @@ Menu names vary by phone and OS version.
 
 ## Notes
 
+- **Voice picker** (under "To"): Automatic, any phone voice for that language (free), or one of Gemini's 30 named voices (uses the key). Remembered per language. The ▶ button previews; each Gemini preview is generated once and reused.
+- **Voice style** (Settings → Advanced): a free-text delivery style such as "dramatic and theatrical, like Moira Rose". When set, every playback uses a Gemini voice, which uses more quota. It changes only the delivery, never the words.
 - Models: `gemini-3.5-flash-lite` for translation (falls back to older Flash-Lite models if retired; changeable under Settings → Advanced). `gemini-3.8-flash-lite-tts` / `gemini-3.8-flash-tts` for the fallback voice.
 - Recording is capped at 60 seconds.
 - To update the app, replace `index.html` in this repo; phones pick it up on next open.

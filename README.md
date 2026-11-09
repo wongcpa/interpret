@@ -1,4 +1,4 @@
-# Translate
+# interpret: Voice Translator
 
 A one-screen voice translator for phones. Pick "From" and "To", tap the mic, speak, tap again, then tap Play. Built on the Gemini API (Flash-Lite for translation, the phone's own voice for playback, Gemini's voice as a fallback).
 
